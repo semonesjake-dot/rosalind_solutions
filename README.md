@@ -1,6 +1,6 @@
 # Rosalind Solutions
 
-A small, dependency-free Python library solving ten problems from the [Rosalind Bioinformatics Stronghold](https://rosalind.info/problems/list-view/). All solutions are in **`rosalind_functions.py`**. Functions return values instead of printing them.
+A small, dependency-free Python library solving ten problems from the [Rosalind Bioinformatics Stronghold](https://rosalind.info/problems/list-view/). 
 
 ## Problems and functions
 
