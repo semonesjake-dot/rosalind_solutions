@@ -71,3 +71,51 @@ def find_motif(dna, motif):
         raise ValueError('Motif must not be empty')
     return [i + 1 for i in range(len(dna) - len(motif) + 1)
             if dna[i:i + len(motif)] == motif]
+
+
+# Monoisotopic masses of amino acid residues (Daltons), per Rosalind PRTM.
+MONOISOTOPIC_MASS = {
+    'A': 71.03711, 'C': 103.00919, 'D': 115.02694,
+    'E': 129.04259, 'F': 147.06841, 'G': 57.02146,
+    'H': 137.05891, 'I': 113.08406, 'K': 128.09496,
+    'L': 113.08406, 'M': 131.04049, 'N': 114.04293,
+    'P': 97.05276, 'Q': 128.05858, 'R': 156.10111,
+    'S': 87.03203, 'T': 101.04768, 'V': 99.06841,
+    'W': 186.07931, 'Y': 163.06333,
+}
+
+
+def protein_mass(protein):
+    """PRTM: Return the total monoisotopic residue mass in Daltons."""
+    return sum(MONOISOTOPIC_MASS[amino_acid] for amino_acid in protein)
+
+
+def reverse_palindromes(dna):
+    """REVP: Return (1-based position, length) for palindromes of 4..12 bp."""
+    complements = {'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C'}
+    matches = []
+    for i in range(len(dna)):
+        for length in range(4, 13, 2):
+            segment = dna[i:i + length]
+            if len(segment) == length and segment == ''.join(
+                    complements[base] for base in reversed(segment)):
+                matches.append((i + 1, length))
+    return matches
+
+
+def transition_transversion_ratio(first, second):
+    """TRAN: Return transitions divided by transversions for aligned DNA."""
+    if len(first) != len(second):
+        raise ValueError('Sequences must have equal lengths')
+    transitions = 0
+    transversions = 0
+    transition_pairs = {frozenset(('A', 'G')), frozenset(('C', 'T'))}
+    for a, b in zip(first, second):
+        if a != b:
+            if frozenset((a, b)) in transition_pairs:
+                transitions += 1
+            else:
+                transversions += 1
+    if transversions == 0:
+        raise ZeroDivisionError('Ratio is undefined: no transversions')
+    return transitions / transversions
